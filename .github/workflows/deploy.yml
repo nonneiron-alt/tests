@@ -1,0 +1,37 @@
+name: Deploy to Cloudflare Workers
+
+on:
+  push:
+    branches: [main, arena/670c90bf-tests]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: workspace-01a14169-e1dc-71fc-9384-c7705d2c884f/kto-ty-repo
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: workspace-01a14169-e1dc-71fc-9384-c7705d2c884f/kto-ty-repo/package-lock.json
+
+      - run: npm ci
+      - run: npm run check
+      - run: npm test
+
+      - name: Deploy (D1 + Worker + secret)
+        env:
+          CI: true
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          KTO_WORKER_NAME: ${{ vars.KTO_WORKER_NAME || 'kto-ty-quiz' }}
+          KTO_DATABASE_NAME: ${{ vars.KTO_DATABASE_NAME }}
+          KTO_DATABASE_ID: ${{ secrets.KTO_DATABASE_ID }}
+          KTO_KEEP_SECRET: ${{ vars.KTO_KEEP_SECRET }}
+        run: npm run deploy:setup
