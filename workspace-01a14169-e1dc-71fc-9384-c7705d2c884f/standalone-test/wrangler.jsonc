@@ -1,0 +1,24 @@
+{
+  "name": "kto-ty-quiz",
+  "main": "worker.js",
+  "compatibility_date": "2025-04-01",
+  "workers_dev": true,
+  "assets": {
+    "directory": "./static",
+    "binding": "ASSETS",
+    "run_worker_first": [
+      "/api/*"
+    ]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "kto-ty-quiz-db",
+      "database_id": "d131aedd-d5be-48cb-897f-f6c3d5819086",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "kto-ty-quiz",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Russian retro AI quizzes, Cloudflare Workers + D1 + Groq",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "wrangler dev --config wrangler.local.jsonc",
+    "db:local": "wrangler d1 migrations apply kto-ty-local --local --config wrangler.local.jsonc",
+    "test": "node --test tests/*.test.mjs",
+    "check": "node --check worker.js && node --check static/app.js && node --check deploy.mjs",
+    "deploy:setup": "node deploy.mjs",
+    "deploy": "wrangler deploy --config wrangler.jsonc",
+    "secret": "wrangler secret put GROQ_API_KEY --config wrangler.jsonc",
+    "logs": "wrangler tail --config wrangler.jsonc"
+  },
+  "devDependencies": {
+    "wrangler": "4.151.0"
+  }
+}
